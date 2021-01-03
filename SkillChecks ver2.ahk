@@ -106,6 +106,13 @@ function()
 
             if (!overrideRadius)
             {
+                if (clientAreaW = 0 || clientAreaH = 0)
+                {
+                    ; Weird stuff going on with the client area size, so go back to the start of the while loop
+                    ; until we get results that... make sense
+                    continue
+                }
+
                 skillCheckRingPixelsW := (64 / 1920) * clientAreaW
                 skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
