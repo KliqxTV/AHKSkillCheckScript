@@ -86,7 +86,7 @@ radius := 0
 pi := 4 * atan(1)
 sendString := "{XButton2}"
 
-warnedAboutWeirdResults := true
+warnedAboutWeirdResults := false
 
 foundX := 0
 foundY := 0
