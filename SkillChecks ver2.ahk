@@ -104,10 +104,9 @@ function()
                     MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
                     warnedAboutWeirdResults := true
                 }
-
-                radius := skillCheckRingPixelsH
             }
 
+            radius := skillCheckRingPixelsH
             j := 0
 
             if (!skillCheckIsActive)
