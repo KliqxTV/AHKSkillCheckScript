@@ -68,6 +68,16 @@ compareRed(colorArray) => (colorArray[1] > 160 && colorArray[2] < 150 && colorAr
 ; another skill check to be detected and handled, rinse and repeat
 resetActive() => skillCheckIsActive := false
 
+; Declare a function that logs a single custom string to the script's main window
+; 
+; Can't use "log()", built-in logarithm function and all
+logThis(logMessage)
+{
+    ListLines(true)
+    log := "Logged message:`n" . logMessage
+    ListLines(false)
+}
+
 ; Defining some important constants for later:
 ; - the radius of the circle of which we're testing the coordinates (check documentation: https://docs.google.com/document/d/1hdxWs1B4XUBNSWsuO7dYCkg_6YBa4E0-jWKeLSXJ8yM/edit#heading=h.rtxa90h3ust7 )
 ; - ...pi
@@ -97,10 +107,14 @@ function()
             skillCheckRingPixelsW := (64 / 1920) * clientAreaW
             skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
-            if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.1) ; This should literally NEVER be true. If it is, alert the authorities.
+            if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025) ; This should literally NEVER be true. If it is, alert the authorities.
             {
                 if (!warnedAboutWeirdResults)
                 {
+                    logThis("Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
+                    . "`nThe aspect ratio of the client area is " . (clientAreaW / clientAreaW) . "."
+                    . "`n16:9 is " . Round(16/9, 2) . ", 4:3 is " Round(4/3, 2) ".")
+
                     MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
                     warnedAboutWeirdResults := true
                 }
