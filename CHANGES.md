@@ -12,3 +12,4 @@ Documentation: [Google Docs "AHK Skill Check Script"](https://docs.google.com/do
 * Wrote up the sections under the heading *Why didn't it work?*
 * Implemented new system for the `radius`
 * Added logging feature
+* Added option to override the radius with a custom value
