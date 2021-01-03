@@ -69,7 +69,6 @@ compareRed(colorArray) => (colorArray[1] > 160 && colorArray[2] < 150 && colorAr
 resetActive() => skillCheckIsActive := false
 
 ; Declare a function that logs a single custom string to the script's main window
-; 
 ; Can't use "log()", built-in logarithm function and all
 logThis(logMessage)
 {
