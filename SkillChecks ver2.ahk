@@ -78,10 +78,11 @@ logThis(logMessage)
 }
 
 ; Defining some important constants for later:
-; - the radius of the circle of which we're testing the coordinates (check documentation: https://docs.google.com/document/d/1hdxWs1B4XUBNSWsuO7dYCkg_6YBa4E0-jWKeLSXJ8yM/edit#heading=h.rtxa90h3ust7 )
+; - the radius of the circle of which we're testing the coordinates (check documentation: https://docs.google.com/document/d/1hdxWs1B4XUBNSWsuO7dYCkg_6YBa4E0-jWKeLSXJ8yM/edit#heading=h.rtxa90h3ust7)
 ; - ...pi
 ; - the string for the Send() function called once we're ready to do so (the key we're sending)
 radius := 0
+overrideRadius := false
 pi := 4 * atan(1)
 sendString := "{XButton2}"
 
@@ -103,23 +104,27 @@ function()
         {
             WinGetClientPos(, , clientAreaW, clientAreaH, "ahk_exe DeadByDaylight-Win64-Shipping.exe")
 
-            skillCheckRingPixelsW := (64 / 1920) * clientAreaW
-            skillCheckRingPixelsH := (63 / 1080) * clientAreaH
-
-            if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025) ; This should literally NEVER be true. If it is, alert the authorities.
+            if (!overrideRadius)
             {
-                if (!warnedAboutWeirdResults)
-                {
-                    logThis("Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
-                    . "`nThe aspect ratio of the client area is " . (clientAreaW / clientAreaW) . "."
-                    . "`n16:9 is " . Round(16/9, 2) . ", 4:3 is " Round(4/3, 2) ".")
+                skillCheckRingPixelsW := (64 / 1920) * clientAreaW
+                skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
-                    MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
-                    warnedAboutWeirdResults := true
+                if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025) ; This should literally NEVER be true. If it is, alert the authorities.
+                {
+                    if (!warnedAboutWeirdResults)
+                    {
+                        logThis("Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
+                        . "`nThe aspect ratio of the client area is " . (clientAreaW / clientAreaW) . "."
+                        . "`n16:9 is " . Round(16/9, 2) . ", 4:3 is " Round(4/3, 2) ".")
+
+                        MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
+                        warnedAboutWeirdResults := true
+                    }
                 }
+            
+                radius := skillCheckRingPixelsH
             }
 
-            radius := skillCheckRingPixelsH
             j := 0
 
             if (!skillCheckIsActive)
