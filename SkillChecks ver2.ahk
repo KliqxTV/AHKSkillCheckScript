@@ -72,63 +72,83 @@ resetActive() => skillCheckIsActive := false
 ; - the radius of the circle of which we're testing the coordinates (check documentation: https://docs.google.com/document/d/1hdxWs1B4XUBNSWsuO7dYCkg_6YBa4E0-jWKeLSXJ8yM/edit#heading=h.rtxa90h3ust7 )
 ; - ...pi
 ; - the string for the Send() function called once we're ready to do so (the key we're sending)
-
-baseHeight := (63 / 1080)
-baseWidth := (64 / 1920)
-
-
+radius := 0
 pi := 4 * atan(1)
 sendString := "{XButton2}"
+
+warnedAboutWeirdResults := true
 
 foundX := 0
 foundY := 0
 skillCheckIsActive := false
 
-; Start at 0, then work CCW and test each pixel's color
-; If nothing was found, restart the entire process
-while (true)
+function()
 {
-    if (WinActive("ahk_exe DeadByDaylight-Win64-Shipping.exe"))
+    global
+
+    ; Start at 0, then work CCW and test each pixel's color
+    ; If nothing was found, restart the entire process
+    while (true)
     {
-        WinGetClientPos(, , clientAreaW, clientAreaH, "ahk_exe DeadByDaylight-Win64-Shipping.exe")
-        j := 0
-
-        if (!skillCheckIsActive)
+        if (WinActive("ahk_exe DeadByDaylight-Win64-Shipping.exe"))
         {
-            while (j < 360)
-            {
-                x := clientAreaW / 2 + radius * cos(j * pi / 180)
-                y := clientAreaH / 2 + radius * sin(j * pi / 180)
+            WinGetClientPos(, , clientAreaW, clientAreaH, "ahk_exe DeadByDaylight-Win64-Shipping.exe")
 
-                color := PixelGetColor(x, y)
-                color := getRGB(color)
-                if (compareWhite(color))
+            skillCheckRingPixelsW := (64 / 1920) * clientAreaW
+            skillCheckRingPixelsH := (63 / 1080) * clientAreaH
+
+            if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.1) ; This should literally NEVER be true. If it is, alert the authorities.
+            {
+                if (!warnedAboutWeirdResults)
                 {
-                    ; Found the Great success zone -> there's an active skill check!
-                    skillCheckIsActive := true
-                    foundX := x
-                    foundY := y
-                    SetTimer("resetActive", 1800)
+                    MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
+                    warnedAboutWeirdResults := true
                 }
 
-                j += 4 ; Increment j by 4 (pseudo-)angle units
+                radius := skillCheckRingPixelsH
             }
-        }
 
-        if (skillCheckIsActive)
-        {
-            color := PixelGetColor(foundX, foundY)
-            color := getRGB(color)
+            j := 0
 
-            ListLines(true)
-            if (compareRed(color))
+            if (!skillCheckIsActive)
             {
-                ; Send two inputs, some time apart, in case the first one fails for some reason so at
-                ; least the skill check gets saved and completed Well instead of Great... which is still better than not at all
-                Send(sendString)
-                Sleep(Random(70, 100))
-                Send(sendString)
+                while (j < 360)
+                {
+                    x := clientAreaW / 2 + radius * cos(j * pi / 180)
+                    y := clientAreaH / 2 + radius * sin(j * pi / 180)
+
+                    color := PixelGetColor(x, y)
+                    color := getRGB(color)
+                    if (compareWhite(color))
+                    {
+                        ; Found the Great success zone -> there's an active skill check!
+                        skillCheckIsActive := true
+                        foundX := x
+                        foundY := y
+                        SetTimer("resetActive", 1800)
+                    }
+
+                    j += 4 ; Increment j by 4 (pseudo-)angle units
+                }
+            }
+
+            if (skillCheckIsActive)
+            {
+                color := PixelGetColor(foundX, foundY)
+                color := getRGB(color)
+
+                ListLines(true)
+                if (compareRed(color))
+                {
+                    ; Send two inputs, some time apart, in case the first one fails for some reason so at
+                    ; least the skill check gets saved and completed Well instead of Great... which is still better than not at all
+                    Send(sendString)
+                    Sleep(Random(70, 100))
+                    Send(sendString)
+                }
             }
         }
     }
 }
+
+function()
