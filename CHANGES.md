@@ -11,3 +11,4 @@ Documentation: [Google Docs "AHK Skill Check Script"](https://docs.google.com/do
 * Started analyzing why it didn't work
 * Wrote up the sections under the heading *Why didn't it work?*
 * Implemented new system for the `radius`
+* Added logging feature
