@@ -138,11 +138,16 @@ function()
                     color := getRGB(color)
                     if (compareWhite(color))
                     {
-                        ; Found the Great success zone -> there's an active skill check!
+                        ; Found the Great success zone -> there's an active skill check, so store where it is,
+                        ; set a timer to reset the skillCheckIsActive variable after 1.8 seconds
+                        ; Then reset j and break out of the while loop
                         skillCheckIsActive := true
                         foundX := x
                         foundY := y
                         SetTimer("resetActive", -1800)
+
+                        j := 0
+                        break
                     }
 
                     j += 4 ; Increment j by 4 (pseudo-)angle units
