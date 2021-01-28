@@ -2,6 +2,9 @@
 
 ListLines(false)
 
+; Set SendMode to "Event". Solved a lot of problems with Send()'s in other games.
+SendMode("Event")
+
 ; Show a tooltip to let the user know the script has been loaded
 CoordMode("ToolTip", "Screen")
 ToolTip("Loaded SkillChecks ver2.ahk successfully!", 5, 5)

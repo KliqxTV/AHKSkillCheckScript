@@ -1,5 +1,7 @@
 ListLines(false)
 
+SendMode("Event")
+
 CoordMode("ToolTip", "Screen")
 ToolTip("Loaded SkillChecks ver2.ahk successfully!", 5, 5)
 SetTimer("delTool", -1000)
