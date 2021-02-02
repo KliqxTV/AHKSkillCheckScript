@@ -110,7 +110,8 @@ function()
                 skillCheckRingPixelsW := (64 / 1920) * clientAreaW
                 skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
-                if (Abs(1 - (skillCheckRingPixelsW / skillCheckRingPixelsH)) > 0.025) ; This should literally NEVER be true. If it is, alert the authorities.
+                ; This should literally NEVER be true. If it is, alert the authorities.
+                if (Abs(1 - (skillCheckRingPixelsW / skillCheckRingPixelsH)) > 0.025)
                 {
                     if (!warnedAboutWeirdResults)
                     {
@@ -156,7 +157,8 @@ function()
                         break
                     }
 
-                    j += 4 ; Increment j by 4 (pseudo-)angle units
+                    ; Increment j by 4 (pseudo-)angle units
+                    j += 4
                 }
             }
 

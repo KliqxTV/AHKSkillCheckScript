@@ -1,3 +1,7 @@
+/*
+    Comments removed using regex pattern    (.*; .*\n*\r*\n*)
+*/
+
 ListLines(false)
 
 SendMode("Event")
@@ -49,17 +53,10 @@ compareRed(colorArray) => (colorArray[1] > 160 && colorArray[2] < 150 && colorAr
 
 resetActive() => skillCheckIsActive := false
 
-logThis(logMessage)
-{
-    ListLines(true)
-    log := "Logged message:`n" . logMessage
-    ListLines(false)
-}
-
 radius := 0
 overrideRadius := false
 pi := 4 * atan(1)
-sendString := "{XButton2}"
+sendString := "XButton2"
 
 warnedAboutWeirdResults := false
 
@@ -79,16 +76,23 @@ function()
 
             if (!overrideRadius)
             {
+                if (clientAreaW = 0 || clientAreaH = 0)
+                {
+                    continue
+                }
+
                 skillCheckRingPixelsW := (64 / 1920) * clientAreaW
                 skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
-                if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025)
+                if (Abs(1 - (skillCheckRingPixelsW / skillCheckRingPixelsH)) > 0.025)
                 {
                     if (!warnedAboutWeirdResults)
                     {
-                        logThis("Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
+                        ListLines(true)
+                        log := "Logged message:`n" "Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
                         . "`nThe aspect ratio of the client area is " . (clientAreaW / clientAreaW) . "."
-                        . "`n16:9 is " . Round(16/9, 2) . ", 4:3 is " Round(4/3, 2) ".")
+                        . "`n16:9 is " . Round(16/9, 2) . ", 4:3 is " Round(4/3, 2) "."
+                        ListLines(false)
 
                         MsgBox("Either a calculation has gone terribly wrong or the game is running at a really weird aspect ratio or resolution.`nOpting to use the result calculated based on client area height as the numbers here are smaller.`n`nThe script might not work correctly, if at all, however!`n`nThis warning will not be shown again until the script is reloaded.", "Warning", 16)
                         warnedAboutWeirdResults := true
@@ -96,9 +100,10 @@ function()
                 }
             
                 radius := skillCheckRingPixelsH
+                overrideRadius := true
             }
 
-            j := 0
+            j := 120
 
             if (!skillCheckIsActive)
             {
@@ -111,10 +116,15 @@ function()
                     color := getRGB(color)
                     if (compareWhite(color))
                     {
+                        ListLines(true)
                         skillCheckIsActive := true
                         foundX := x
                         foundY := y
-                        SetTimer("resetActive", -1800)
+                        SetTimer("resetActive", -2500)
+
+                        j := 120
+
+                        break
                     }
 
                     j += 4
@@ -126,15 +136,15 @@ function()
                 color := PixelGetColor(foundX, foundY)
                 color := getRGB(color)
 
-                ListLines(true)
                 if (compareRed(color))
                 {
-                    Send(sendString)
-                    Sleep(Random(70, 100))
-                    Send(sendString)
+                    SendInput("{" . sendString . "}")
+                    SendPlay("{" . sendString . "}")
+                    SendEvent("{" . sendString . "}")
                     skillCheckIsActive := false
                 }
             }
+            ListLines(false)
         }
     }
 }
