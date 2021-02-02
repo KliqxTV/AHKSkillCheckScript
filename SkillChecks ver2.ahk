@@ -78,7 +78,7 @@ resetActive() => skillCheckIsActive := false
 radius := 0
 overrideRadius := false
 pi := 4 * atan(1)
-sendString := "{XButton2}"
+sendString := "XButton2"
 
 warnedAboutWeirdResults := false
 
@@ -126,9 +126,10 @@ function()
                 }
             
                 radius := skillCheckRingPixelsH
+                overrideRadius := true
             }
 
-            j := 0
+            j := 120
 
             if (!skillCheckIsActive)
             {
@@ -141,15 +142,17 @@ function()
                     color := getRGB(color)
                     if (compareWhite(color))
                     {
+                        ListLines(true)
                         ; Found the Great success zone -> there's an active skill check, so store where it is,
                         ; set a timer to reset the skillCheckIsActive variable after 1.8 seconds
                         ; Then reset j and break out of the while loop
                         skillCheckIsActive := true
                         foundX := x
                         foundY := y
-                        SetTimer("resetActive", -1800)
+                        SetTimer("resetActive", -2500)
 
-                        j := 0
+                        j := 120
+
                         break
                     }
 
@@ -162,17 +165,17 @@ function()
                 color := PixelGetColor(foundX, foundY)
                 color := getRGB(color)
 
-                ListLines(true)
                 if (compareRed(color))
                 {
                     ; Send two inputs, some time apart, in case the first one fails for some reason so at
                     ; least the skill check gets saved and completed Well instead of Great... which is still better than not at all
-                    Send(sendString)
-                    Sleep(Random(70, 100))
-                    Send(sendString)
+                    SendInput("{" . sendString . "}")
+                    SendPlay("{" . sendString . "}")
+                    SendEvent("{" . sendString . "}")
+                    skillCheckIsActive := false
                 }
-                ListLines(false)
             }
+            ListLines(false)
         }
     }
 }

@@ -71,7 +71,7 @@ function()
 {
     global
 
-            while (true)
+    while (true)
     {
         if (WinActive("ahk_exe DeadByDaylight-Win64-Shipping.exe"))
         {
@@ -82,7 +82,8 @@ function()
                 skillCheckRingPixelsW := (64 / 1920) * clientAreaW
                 skillCheckRingPixelsH := (63 / 1080) * clientAreaH
 
-                if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025)                 {
+                if (Abs(skillCheckRingPixelsW / skillCheckRingPixelsH) > 0.025)
+                {
                     if (!warnedAboutWeirdResults)
                     {
                         logThis("Unexpected results for the radius: w = " . skillCheckRingPixelsW . ", h = " . skillCheckRingPixelsH
@@ -110,13 +111,14 @@ function()
                     color := getRGB(color)
                     if (compareWhite(color))
                     {
-                                                skillCheckIsActive := true
+                        skillCheckIsActive := true
                         foundX := x
                         foundY := y
-                        SetTimer("resetActive", 1800)
+                        SetTimer("resetActive", -1800)
                     }
 
-                    j += 4                 }
+                    j += 4
+                }
             }
 
             if (skillCheckIsActive)
@@ -127,9 +129,10 @@ function()
                 ListLines(true)
                 if (compareRed(color))
                 {
-                                                            Send(sendString)
+                    Send(sendString)
                     Sleep(Random(70, 100))
                     Send(sendString)
+                    skillCheckIsActive := false
                 }
             }
         }
