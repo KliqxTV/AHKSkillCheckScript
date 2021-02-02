@@ -13,3 +13,8 @@ Documentation: [Google Docs "AHK Skill Check Script"](https://docs.google.com/do
 * Implemented new system for the `radius`
 * Added logging feature
 * Added option to override the radius with a custom value
+
+# 2 Feb, 2021
+
+* Attempted to fix the performance issues
+* Attempted to fix the issues about the game not recognizing / responding to inputs
