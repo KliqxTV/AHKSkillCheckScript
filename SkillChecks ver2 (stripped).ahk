@@ -1,5 +1,6 @@
 /*
     Comments removed using regex pattern    (.*; .*\n*\r*\n*)
+    Made using https://regexr.com/ because I'm horrible at regex patterns :)
 */
 
 ListLines(false)
